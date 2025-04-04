@@ -55,3 +55,33 @@ class T5Transformer(Transformer):
     def _load_model(self, model_name_or_path, config, cache_dir):
         self.auto_model = AutoModel.from_pretrained(model_name_or_path, config=config, cache_dir=cache_dir)
 
+
+class DecoderTransformer(Transformer):
+    def forward(self, features):
+        """Returns token_embeddings, cls_token"""
+        trans_features = {'input_ids': features['input_ids'], 'attention_mask': features['attention_mask']}
+        if 'token_type_ids' in features:
+            trans_features['token_type_ids'] = features['token_type_ids']
+
+        output_states = self.auto_model(**trans_features, return_dict=True)
+        output_tokens = output_states.last_hidden_state
+
+        features.update({'token_embeddings': output_tokens, 'attention_mask': features['attention_mask']})
+
+        if self.auto_model.config.output_hidden_states:
+            hidden_states = output_states.hidden_states
+            features.update({'all_layer_embeddings': hidden_states})
+
+        return features
+
+    def _load_model(self, model_name_or_path, config, cache_dir, backend, is_peft_model, **model_args):
+        """Loads the transformer model"""
+        config.output_hidden_states = True
+        self.auto_model = AutoModel.from_pretrained(
+            model_name_or_path, 
+            config=config, 
+            cache_dir=cache_dir, 
+            torch_dtype=torch.bfloat16, 
+            trust_remote_code=True,
+        )
+    

@@ -508,7 +508,7 @@ def encode_inputs(inputs:List[List[str]], context:List[str], base_model:Sentence
             }
 
             if encoding == "half" or encoding == "four_bit":
-                dtype = numpy.float
+                dtype = float
             else:
                 dtype = numpy.float16
 

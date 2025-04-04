@@ -7,7 +7,7 @@ from model.EightBitTransformer import EightBitTransformer
 from model.FourBitTransformer import FourBitTransformer
 from model.HalfPrecisionTransformer import HalfPrecisionTransformer
 from model.ParallelSentenceTransformer import ParallelSentenceTransformer
-from model.transformer_adaptions import BartTransformer
+from model.transformer_adaptions import BartTransformer, DecoderTransformer
 from utils.SpecificLayerPooling import SpecificLayerPooling
 from utils.experiment_util import init_random_weights
 
@@ -23,7 +23,8 @@ def load_model(model_name, control_task_type, encoding, scalar_mixin=False):
         if "bart" in model_name:
             transformer = BartTransformer(model_name, model_args={"output_hidden_states": True})
         elif encoding == "half":
-            transformer = HalfPrecisionTransformer(model_name, model_args={"output_hidden_states": True})
+            #transformer = HalfPrecisionTransformer(model_name, model_args={"output_hidden_states": True})
+            transformer = DecoderTransformer(model_name, model_args={"output_hidden_states": True})
         elif encoding == "four_bit":
             transformer = FourBitTransformer(model_name, model_args={"output_hidden_states": True})
         elif encoding == "eight_bit":

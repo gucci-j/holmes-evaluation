@@ -52,7 +52,7 @@ def main(
     control_task_type = CONTROL_TASK_TYPES[config["control_task_type"]]
 
     base_config = load_base_config(
-        config=config, encoding=encoding,
+        config=config, encoding="half",
         seeds=seeds, num_hidden_layers=num_hidden_layers,
         model_name=model_name, batch_size=batch_size,
         control_task_type=control_task_type, project_prefix=project_prefix

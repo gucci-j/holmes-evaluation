@@ -35,7 +35,9 @@ def main(
     os.system(f"mkdir -p {result_folder}/{version}/")
 
     for control_task_type in control_task_types.split(","):
-        for config_file_path in sorted(glob.glob(f"../data/{version}/*/*{control_task_type}*.yaml"), reverse=True):
+        print(f"Config file: {control_task_type}")
+        for config_file_path in sorted(glob.glob(f"../data/{version}/*/*/*{control_task_type}*.yaml"), reverse=True):
+            print(f"Config file: {config_file_path}")
 
             if in_filter != None and in_filter + "/" not in config_file_path:
                 continue
