@@ -331,9 +331,9 @@ def extract_embeddings_for_input_element(input_element:str, context:str, pre_tok
             return base_model.encode(["unk"], device=device)
 
         embeddings = torch.stack([context_embeddings[joined_context] for layer, context_embeddings in layer_embeddings.items()])
-
+    
     try:
-        selected_embeddings = embeddings[:, input_indices].mean(dim=1).cpu().detach().numpy()
+        selected_embeddings = embeddings[:, input_indices].mean(dim=1).float().cpu().detach().numpy()
     except:
         print()
 
@@ -528,7 +528,7 @@ def encode_inputs(inputs:List[List[str]], context:List[str], base_model:Sentence
                 encoded_inputs = {0: encoded_inputs}
 
             if encoding == "half" or encoding == "four_bit":
-                dtype = numpy.float
+                dtype = float
             else:
                 dtype = numpy.float16
 
